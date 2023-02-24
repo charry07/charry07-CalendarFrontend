@@ -5,18 +5,20 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import { CalendarApi } from '../../api';
 import { AppTextField } from '../../CalendarApp/components';
+import { clearErrorMessage, onCheckingCredentials, onErrorAuth, onLogin } from '../../store/auth/authSlice';
 import { AuthLayout } from '../layout/AuthLayout';
 
 export const RegisterPage = () => {
-  const { status, email, displayName, photoURL, uid, errorMessage } = useSelector((state: any) => state.auth);
+  const { status, user, errorMessage } = useSelector((state: any) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const initialValues = {
     email: '',
     password: '',
     confirmPassword: '',
-    username: '',
+    name: '',
   };
 
   const validationSchema = Yup.object({
@@ -27,13 +29,19 @@ export const RegisterPage = () => {
         // 'Debe contener 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.'
         'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character'
       ),
+    name: Yup.string().min(8, String('Must Contain 8 Characters')).required('Enter your name'),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .required('Confirm password'),
-    username: Yup.string().min(8, String('Must Contain 8 Characters')).required('Enter your name'),
     email: Yup.string().email(String('Check the email')).required(String('Enter your email')),
   });
 
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(clearErrorMessage());
+    }, 3000);
+  }, [errorMessage])
+  
 
   return (
     <AuthLayout title='Register' initialValues={initialValues}>
@@ -44,7 +52,15 @@ export const RegisterPage = () => {
         validationSchema={validationSchema}
         onSubmit={async (data, { setSubmitting }) => {
           setSubmitting(true);
-
+          onCheckingCredentials();
+          let res;
+          try {
+            res = await CalendarApi.post('/auth/register', data);
+          } catch (error) {
+            return dispatch(onErrorAuth((error as any).response.data.message));
+          }
+          localStorage.setItem('token', res.data.token);
+          dispatch(onLogin({ uid: res.data.user._id, name: res.data.user.name, email: res.data.user.email }));
           navigate('/');
           setSubmitting(false);
         }}>
@@ -93,13 +109,17 @@ export const RegisterPage = () => {
               fullWidth
               required
               sx={{ mt: 1.2 }}
-              name='username'
+              name='name'
               type='text'
-              label='Username'
-              placeholder='Username'
-              onChange={({ target }: any) => setFieldValue('username', target.value)}
+              label='Name'
+              placeholder='Name'
+              onChange={({ target }: any) => setFieldValue('name', target.value)}
             />
-            {errorMessage && <Alert severity='error' sx={{mt:1}}>{errorMessage}</Alert>}
+            {errorMessage && (
+              <Alert severity='error' sx={{ mt: 1 }}>
+                {errorMessage}
+              </Alert>
+            )}
 
             <Button fullWidth variant='contained' sx={{ mt: 2 }} type='submit' disabled={status == 'checking' || !isValid}>
               <Typography>Register</Typography>

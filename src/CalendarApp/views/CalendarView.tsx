@@ -1,7 +1,7 @@
 import { DeleteOutlined } from '@mui/icons-material';
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import { Box, Button, Dialog, IconButton, useTheme } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Calendar } from 'react-big-calendar';
 import { useDispatch, useSelector } from 'react-redux';
 import { ModalView } from '.';
@@ -10,7 +10,8 @@ import { calendarMessages, localizer } from './helpers';
 
 export const CalendarView = () => {
   const dispatch = useDispatch();
-  const { events } = useSelector((state: any) => state.calendar);
+  const { events, activeEvent } = useSelector((state: any) => state.calendar);
+  const eventsParsed = events.map((e: any) => ({ ...e, start: new Date(e.start), end: new Date(e.end) }));
   const [open, setOpen] = useState(false);
   var themeColor = useTheme().palette.primary.main;
   const lastView: any = localStorage.getItem('lastView') || 'week';
@@ -20,13 +21,19 @@ export const CalendarView = () => {
     setOpen(true);
   };
 
+  useEffect(() => {
+    if (activeEvent) {
+      setOpen(true);
+    }
+  }, [activeEvent]);
+
   return (
     <>
       <Calendar
         culture='es'
         localizer={localizer}
         defaultDate={new Date()}
-        events={events}
+        events={eventsParsed}
         style={{ minHeight: 'calc(100vh - 110px)' }}
         defaultView={lastView}
         messages={calendarMessages()}

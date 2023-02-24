@@ -12,7 +12,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../../store/auth/authSlice';
+import { onLogout } from '../../store/auth/authSlice';
 import { toggleBar } from '../../store/componentsSlices.ts';
 
 export const AppBarMenu = (props: any) => {
@@ -39,7 +39,7 @@ export const AppBarMenu = (props: any) => {
   };
   const handleLogout = () => {
     setAnchorEl(null);
-    dispatch(logout({ errorMessage: null }));
+    dispatch(onLogout({ errorMessage: null }));
 
     navigate('/auth/login');
   };

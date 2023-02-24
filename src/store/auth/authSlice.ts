@@ -4,23 +4,34 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState: {
     status: 'no-authenticated', // 'checking' , 'authenticated'
-    uid: null,
-    email: null,
-    displayName: null,
-    photoURL: null,
+    user: {},
     errorMessage: null,
   },
   reducers: {
-    login: (state, { payload }) => {
-
+    onLogin: (state, { payload }) => {
+      state.status = 'authenticated';
+      state.user = payload;
+      state.errorMessage = null;
     },
-    logout: (state, { payload }) => {
-
+    onLogout: (state) => {
+      state.status = 'no-authenticated';
+      state.user = {};
+      state.errorMessage = null;
     },
-    checkingCredentials: (state) => {
+    onCheckingCredentials: (state) => {
       state.status = 'checking';
+      state.user = {};
+      state.errorMessage = null;
     },
+    onErrorAuth: (state, { payload }) => {
+      state.status = 'no-authenticated';
+      state.user = {};
+      state.errorMessage = payload;
+    },
+    clearErrorMessage: (state) => {
+      state.errorMessage = null;
+    }
   },
 });
 
-export const { login, logout, checkingCredentials } = authSlice.actions;
+export const { onLogin, onLogout, onCheckingCredentials , onErrorAuth , clearErrorMessage } = authSlice.actions;
