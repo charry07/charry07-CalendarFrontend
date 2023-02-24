@@ -39,8 +39,7 @@ export const AppBarMenu = (props: any) => {
   };
   const handleLogout = () => {
     setAnchorEl(null);
-    dispatch(onLogout({ errorMessage: null }));
-
+    dispatch(onLogout());
     navigate('/auth/login');
   };
 
