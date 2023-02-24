@@ -9,7 +9,7 @@ export const CalendarLayout = ({ children }: any) => {
       {/* SideBar */}
       <SideBar />
       {/* Main */}
-      <Box component='main' sx={{ p: 3, display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 110px)' }}>
+      <Box component='main' sx={{ p: 3, display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 185px)' }}>
         {children}
       </Box>
       {/* Footer */}

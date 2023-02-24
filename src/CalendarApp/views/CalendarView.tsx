@@ -1,11 +1,10 @@
-import { DeleteOutlined } from '@mui/icons-material';
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
-import { Box, Button, Dialog, IconButton, useTheme } from '@mui/material';
+import { Box, Dialog, IconButton, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Calendar } from 'react-big-calendar';
 import { useDispatch, useSelector } from 'react-redux';
 import { ModalView } from '.';
-import { deleteEvent, setActiveEvent } from '../../store/calendar/calendarSlice';
+import { setActiveEvent } from '../../store/calendar/calendarSlice';
 import { calendarMessages, localizer } from './helpers';
 
 export const CalendarView = () => {

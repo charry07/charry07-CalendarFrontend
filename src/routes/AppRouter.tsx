@@ -18,11 +18,5 @@ export const AppRouter = () => {
     });
   }, []);
 
-  return (
-    <Routes>
-      {status === 'authenticated' ? <Route path='/*' element={<CalendarRoutes />} /> : <Route path='auth/*' element={<AuthRoutes />} />}
-
-      <Route path='*' element={<Navigate to='auth/login' />} />
-    </Routes>
-  );
+  return <Routes>{status === 'authenticated' ? <Route path='/*' element={<CalendarRoutes />} /> : <Route path='auth/*' element={<AuthRoutes />} />}</Routes>;
 };
