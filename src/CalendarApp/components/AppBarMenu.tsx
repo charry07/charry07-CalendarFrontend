@@ -16,7 +16,7 @@ import { onLogout } from '../../store/auth/authSlice';
 import { toggleBar } from '../../store/componentsSlices.ts';
 
 export const AppBarMenu = (props: any) => {
-  const { displayName, photoURL } = useSelector((state: any) => state.auth);
+  const { user, photoURL } = useSelector((state: any) => state.auth);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,6 +40,7 @@ export const AppBarMenu = (props: any) => {
   const handleLogout = () => {
     setAnchorEl(null);
     dispatch(onLogout());
+    localStorage.clear();
     navigate('/auth/login');
   };
 
@@ -95,7 +96,7 @@ export const AppBarMenu = (props: any) => {
             </IconButton>
           ) : null}
           <Typography variant='h6' onClick={onClickDev} sx={{ display: { xs: 'none', sm: 'flex' }, cursor: 'pointer', mx: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {displayName ? displayName : 'ACharryDev'}
+            {user.name ? user.name : 'ACharryDev'}
           </Typography>
 
           {/* {location.pathname === '/' || location.pathname === '/Marvel' || location.pathname === '/DC' ? (
@@ -119,7 +120,7 @@ export const AppBarMenu = (props: any) => {
             aria-haspopup='true'
             onClick={handleProfileMenuOpen}
             color='inherit'>
-            <Avatar src={photoURL} alt={displayName} />
+            <Avatar src={photoURL} alt={user.name} />
           </IconButton>
         </Toolbar>
       </AppBar>
