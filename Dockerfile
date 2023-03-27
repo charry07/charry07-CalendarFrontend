@@ -2,9 +2,7 @@
 FROM node:18
 
 # Add variable .env to the container environment variables (optional)  
-ENV PORT=3001
-ENV MONGODB_CNN=mongodb+srv://charry07:Charryto-07@clusteracn.j3bdj.mongodb.net/Calendar
-ENV SECRET_JWT_SEED=aquiTieenQueIrUnaFraseSecretaPeroestasirve
+# ENV PORT=3001
 
 # Create and change to the app directory
 WORKDIR /app            
@@ -19,16 +17,16 @@ RUN npm install
 COPY . .                
 
  # Configure port 3000 for the app to run on
-EXPOSE 3000            
+EXPOSE 5173           
 
 # Run the web service on container startup
-CMD [ "npm", "start" ]  
+CMD [ "npm", "start", "--", "--host" ]  
 
 
 # despues en la raiz del proyecto agrego: .dockerignore (para ignorar archivos que no se necesitan en el contenedor como node_modules, .git, etc)
 # despues con el comando [docker build -t nombre-de-proyecto] . (el punto es para decirle que esta en la raiz del proyecto)
 
-# despues con el comando [docker run -p 5000:3001 nombre-de-proyecto] (el -p es para mapear el puerto 3001 del contenedor al puerto 5000 de mi maquina)
+# despues con el comando [docker run -p 5000:3000 nombre-de-proyecto] (el -p es para mapear el puerto 3000 del contenedor al puerto 5000 de mi maquina)
 
 
 #el comando en la consola [docker container prune] borra todos los contenedores que no estan corriendo
