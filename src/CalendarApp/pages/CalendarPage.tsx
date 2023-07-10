@@ -11,7 +11,7 @@ export const CalendarPage = () => {
 
   useEffect(() => {
     CalendarApi.get('/events').then(({ data }) => {
-      const userEvents = data.filter((event: any) => event.user._id === user.uid);
+      const userEvents = data?.filter((event: any) => event?.user?._id === user?.uid);
       dispatch(setEvents(userEvents));
     });
   }, []);
